@@ -3,9 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from page import Page
 
-page_list = ["ホーム", "箱ひげ図"]
-
-st.title("Data Visualization")
+page_list = ["ホーム", "棒グラフ", "箱ひげ図"]
+st.set_page_config(
+    page_title="Data Visualization",
+    layout="wide")
 
 # 以下をサイドバーに表示
 st.sidebar.markdown("### 機械学習に用いるcsvファイルを入力してください")
