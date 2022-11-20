@@ -17,13 +17,15 @@ uploaded_files = st.sidebar.file_uploader("Choose a CSV file", accept_multiple_f
 page_status = st.sidebar.radio("ページ選択", page_list)
 
 if uploaded_files:
-    df = pd.read_csv(uploaded_files, header=0)
-    st.session_state["dv_page"] = Page(df)
-
-match page_status:
-    case "ホーム":
-        st.session_state["dv_page"].home_page()
-    case "箱ひげ図":
-        st.session_state["dv_page"].boxplot_page()
-    case _:
-        st.write("ファイルをアップロードしてください")
+    st.session_state["file"] = pd.read_csv(uploaded_files, header=0)
+    dv_page = Page(st.session_state["file"])
+if "file" in st.session_state:
+    match page_status:
+        case "ホーム":
+            dv_page.home_page()
+        case "棒グラフ":
+            dv_page.bar_chart_page()
+        case "箱ひげ図":
+            dv_page.boxplot_page()
+else:
+    st.write("ファイルをアップロードしてください")
