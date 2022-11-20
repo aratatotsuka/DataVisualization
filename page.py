@@ -87,7 +87,6 @@ class Page:
                     data.append(self.df[(self.df[refine_column]==i) & (self.df[main_column].notna())][main_column])
                 labels = option2
             fig, ax = plt.subplots()
-            st.write(data)
             plt.boxplot(data, labels=labels, whis=slide)
             st.pyplot(fig)
             self.__download_button("boxplot", fig)
