@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from page import Page
 
-page_list = ["ホーム", "棒グラフ", "箱ひげ図"]
+page_list = ["ホーム", "ヒートマップ", "棒グラフ", "箱ひげ図"]
 st.set_page_config(
     page_title="Data Visualization",
     layout="wide")
@@ -23,6 +23,8 @@ if "file" in st.session_state:
     match page_status:
         case "ホーム":
             dv_page.home_page()
+        case "ヒートマップ":
+            dv_page.heatmap_page()
         case "棒グラフ":
             dv_page.bar_chart_page()
         case "箱ひげ図":
