@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.style as mplstyle
+import seaborn as sns
 import io
 
 class Page:
@@ -26,6 +27,7 @@ class Page:
         if 'filter_state' not in st.session_state:
             st.session_state["filter_state"] = False
         self.__init_session_state_bar_chart()
+        self.__init_session_state_heatmap()
     
     def __init_session_state_bar_chart(self):
         if 'bc_main_column' not in st.session_state:
@@ -35,6 +37,12 @@ class Page:
 
     def __init_session_state_boxplot(self):
         pass
+
+    def __init_session_state_heatmap(self):
+        if 'option_heatmap' not in st.session_state:
+            st.session_state["option_heatmap"] = None
+        if 'visual_button_state_heatmap' not in st.session_state:
+            st.session_state["visual_button_state_heatmap"] = False
 
     def home_page(self):
         st.markdown("### 入力データ")
@@ -56,7 +64,7 @@ class Page:
                 option2 = st.selectbox("絞り込みたいカラムを選択してください", self.df_columns)
                 sort_columns = sorted(self.df[bc_main_column].unique())
                 sharey = st.checkbox("y軸を揃える")
-                fig, ax = plt.subplots(4, 3, tight_layout=True, figsize=(25.0, 50.0), sharey=sharey)
+                fig, ax = plt.subplots(7, 3, tight_layout=True, figsize=(25.0, 50.0), sharey=sharey)
                 visual_state = st.checkbox("グラフの表示", key="bc_visual_button_state")
                 if visual_state:
                     for index, op in enumerate(sorted(self.df[option2].unique())):
@@ -90,6 +98,14 @@ class Page:
             plt.boxplot(data, labels=labels, whis=slide)
             st.pyplot(fig)
             self.__download_button("boxplot", fig)
+    
+    def heatmap_page(self):
+        option = st.multiselect("カラム選択", self.df_columns, key="option_heatmap", default=self.df_columns_list)
+        visual_state = st.checkbox("グラフの表示", key="visual_button_state_heatmap")
+        if visual_state:
+            fig, ax = plt.subplots(nrows=1, ncols=1)
+            sns.heatmap(self.df[option].corr(), annot=True,ax=ax)
+            st.pyplot(fig)
     
     def __download_button(self, filename, fig):
         fn = filename + '.png'
